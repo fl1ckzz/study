@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SneakHub — магазин кроссовок</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ХЕДЕР -->
+  <header class="header">
+    <div class="logo">Sneak<span>Hub</span></div>
+
+    <nav class="auth" id="authBlock">
+      <!-- Сюда позже JS подставит либо кнопки, либо имя пользователя -->
+      <button class="btn btn-outline" id="loginBtn">Вход</button>
+      <button class="btn btn-primary" id="registerBtn">Регистрация</button>
+    </nav>
+  </header>
+
+  <!-- ОСНОВНОЙ КОНТЕНТ -->
+  <main>
+    <!-- Приветственный блок -->
+    <section class="hero">
+      <h1>Кроссовки твоей мечты</h1>
+      <p>Оригинальные модели • Быстрая доставка • Лучшие цены</p>
+    </section>
+
+    <!-- Каталог -->
+    <section class="catalog">
+      <h2 class="section-title">Каталог</h2>
+      <div class="grid" id="catalog"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    © 2025 SneakHub — учебный проект
+  </footer>
+  <!-- ================= МОДАЛЬНОЕ ОКНО АВТОРИЗАЦИИ ================= -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+
+      <button class="modal-close" id="modalClose">✕</button>
+
+      <!-- Вкладки -->
+      <div class="tabs">
+        <button class="tab active" data-tab="login">Вход</button>
+        <button class="tab" data-tab="register">Регистрация</button>
+      </div>
+
+      <!-- Форма ВХОДА -->
+      <form class="form" id="loginForm">
+        <h2>С возвращением!</h2>
+
+        <label>Email
+          <input type="email" name="email" placeholder="you@mail.ru" required>
+        </label>
+
+        <label>Пароль
+          <input type="password" name="password" placeholder="••••••" required>
+        </label>
+
+        <p class="form-error" id="loginError"></p>
+
+        <button type="submit" class="btn btn-primary btn-full">Войти</button>
+      </form>
+
+      <!-- Форма РЕГИСТРАЦИИ -->
+      <form class="form hidden" id="registerForm">
+        <h2>Создать аккаунт </h2>
+
+        <label>Имя
+          <input type="text" name="name" placeholder="Как тебя зовут?" required minlength="2">
+        </label>
+
+        <label>Email
+          <input type="email" name="email" placeholder="you@mail.ru" required>
+        </label>
+
+        <label>Пароль
+          <input type="password" name="password" placeholder="минимум 4 символа" required minlength="4">
+        </label>
+
+        <p class="form-error" id="registerError"></p>
+
+        <button type="submit" class="btn btn-primary btn-full">Зарегистрироваться</button>
+      </form>
+
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
