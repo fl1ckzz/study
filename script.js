@@ -396,5 +396,7 @@ document.addEventListener("keydown", (e) => {
   }
 });
 // ===================== СТАРТ =====================
+// ===================== СТАРТ =====================
 renderCatalog();
 renderAuth();
+updateCartBadge();
