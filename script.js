@@ -1,14 +1,37 @@
 // ===================== ДАННЫЕ КАТАЛОГА =====================
 // Пока массив прямо здесь. Потом можно вынести в отдельный products.js
 const products = [
-  { id: 1, brand: "Nike",    name: "Air Max 270",       price: 12990, emoji: "", bg: "linear-gradient(135deg,#c8f0d4,#a8e6cf)" },
-  { id: 2, brand: "Adidas",  name: "Ultraboost 22",     price: 15490, emoji: "", bg: "linear-gradient(135deg,#d4f0d9,#b8e6c1)" },
-  { id: 3, brand: "Puma",    name: "RS-X Reinvention",  price: 9990,  emoji: "", bg: "linear-gradient(135deg,#e0f5e0,#c0e8c8)" },
-  { id: 4, brand: "New Balance", name: "574 Classic",   price: 11200, emoji: "", bg: "linear-gradient(135deg,#cbeed3,#a0dfb0)" },
-  { id: 5, brand: "Reebok",  name: "Club C 85",         price: 8490,  emoji: "", bg: "linear-gradient(135deg,#d8f3dc,#b7e4c7)" },
-  { id: 6, brand: "Asics",   name: "Gel-Kayano 29",     price: 16990, emoji: "", bg: "linear-gradient(135deg,#e6f7e6,#c6ebd0)" },
-  { id: 7, brand: "Jordan",  name: "Air 1 Low",         price: 18990, emoji: "", bg: "linear-gradient(135deg,#b9e8c5,#93d8a8)" },
-  { id: 8, brand: "Vans",    name: "Old Skool",         price: 7290,  emoji: "", bg: "linear-gradient(135deg,#d0efd8,#aee0bc)" },
+  { id: 1, brand: "Nike",    name: "Air Max 270",      price: 12990, emoji: "👟", bg: "linear-gradient(135deg,#c8f0d4,#a8e6cf)",
+    desc: "Легендарная амортизация Air Max. Мягкая посадка, дышащий верх и стиль на каждый день.",
+    sizes: [39, 40, 41, 42, 43, 44] },
+
+  { id: 2, brand: "Adidas",  name: "Ultraboost 22",    price: 15490, emoji: "👟", bg: "linear-gradient(135deg,#d4f0d9,#b8e6c1)",
+    desc: "Технология BOOST для максимальной энергии в каждом шаге. Идеально для бега и города.",
+    sizes: [40, 41, 42, 43, 44, 45] },
+
+  { id: 3, brand: "Puma",    name: "RS-X Reinvention", price: 9990,  emoji: "👟", bg: "linear-gradient(135deg,#e0f5e0,#c0e8c8)",
+    desc: "Массивный ретро-дизайн с современной амортизацией. Яркий акцент в твоём образе.",
+    sizes: [38, 39, 40, 41, 42, 43] },
+
+  { id: 4, brand: "New Balance", name: "574 Classic",  price: 11200, emoji: "👟", bg: "linear-gradient(135deg,#cbeed3,#a0dfb0)",
+    desc: "Икона 80-х и хит современности. Замша и сетка, мягкая подошва ENCAP.",
+    sizes: [39, 40, 41, 42, 43, 44, 45] },
+
+  { id: 5, brand: "Reebok",  name: "Club C 85",        price: 8490,  emoji: "👟", bg: "linear-gradient(135deg,#d8f3dc,#b7e4c7)",
+    desc: "Классические теннисные кроссовки в минималистичном дизайне. Кожаный верх, вечная классика.",
+    sizes: [38, 39, 40, 41, 42, 43] },
+
+  { id: 6, brand: "Asics",   name: "Gel-Kayano 29",    price: 16990, emoji: "👟", bg: "linear-gradient(135deg,#e6f7e6,#c6ebd0)",
+    desc: "Премиальная беговая модель с гелевой амортизацией. Поддержка стопы на длинных дистанциях.",
+    sizes: [40, 41, 42, 43, 44, 45] },
+
+  { id: 7, brand: "Jordan",  name: "Air 1 Low",        price: 18990, emoji: "👟", bg: "linear-gradient(135deg,#b9e8c5,#93d8a8)",
+    desc: "Культовые баскетбольные кроссовки. Кожаный верх и узнаваемый силуэт Air Jordan 1.",
+    sizes: [40, 41, 42, 43, 44, 45] },
+
+  { id: 8, brand: "Vans",    name: "Old Skool",        price: 7290,  emoji: "👟", bg: "linear-gradient(135deg,#d0efd8,#aee0bc)",
+    desc: "Скейтерская классика с боковой полосой. Прочные, удобные, на все времена.",
+    sizes: [38, 39, 40, 41, 42, 43, 44] },
 ];
 
 // ===================== РЕНДЕР КАТАЛОГА =====================
@@ -30,10 +53,7 @@ function renderCatalog() {
       <div class="card-price">${p.price.toLocaleString("ru-RU")} ₽</div>
     `;
 
-    card.addEventListener("click", () => {
-      // сюда потом повесим переход на страницу товара
-      console.log("Клик по товару:", p.name);
-    });
+       card.addEventListener("click", () => openProduct(p.id));
 
     catalogEl.appendChild(card);
   });
@@ -190,6 +210,191 @@ function renderAuth() {
   }
 }
 
+// ===================== ТОВАР: ОТКРЫТИЕ =====================
+
+const productOverlay = document.getElementById("productOverlay");
+const productClose   = document.getElementById("productClose");
+const pvImage = document.getElementById("pvImage");
+const pvBrand = document.getElementById("pvBrand");
+const pvName  = document.getElementById("pvName");
+const pvPrice = document.getElementById("pvPrice");
+const pvDesc  = document.getElementById("pvDesc");
+const pvSizes = document.getElementById("pvSizes");
+const pvAdd   = document.getElementById("pvAdd");
+
+let currentProduct = null;   // открытый сейчас товар
+let currentSize    = null;   // выбранный размер
+
+function openProduct(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+
+  currentProduct = p;
+  currentSize = null;
+
+  pvImage.textContent = p.emoji;
+  pvImage.style.background = p.bg;
+  pvBrand.textContent = p.brand;
+  pvName.textContent  = p.name;
+  pvPrice.textContent = p.price.toLocaleString("ru-RU") + " ₽";
+  pvDesc.textContent  = p.desc;
+
+  // Рендер размеров
+  pvSizes.innerHTML = "";
+  p.sizes.forEach(size => {
+    const btn = document.createElement("button");
+    btn.className = "size-btn";
+    btn.textContent = size;
+    btn.addEventListener("click", () => {
+      pvSizes.querySelectorAll(".size-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentSize = size;
+    });
+    pvSizes.appendChild(btn);
+  });
+
+  productOverlay.classList.add("open");
+}
+
+productClose.addEventListener("click", () => productOverlay.classList.remove("open"));
+productOverlay.addEventListener("click", (e) => {
+  if (e.target === productOverlay) productOverlay.classList.remove("open");
+});
+
+// Кнопка "Добавить в корзину" в модалке товара
+pvAdd.addEventListener("click", () => {
+  if (!currentProduct) return;
+
+  if (!currentSize) {
+    // мягко подсветим блок размеров
+    pvSizes.parentElement.style.transition = "transform .2s";
+    pvSizes.parentElement.style.transform = "scale(1.03)";
+    setTimeout(() => { pvSizes.parentElement.style.transform = "scale(1)"; }, 200);
+    return;
+  }
+
+  addToCart(currentProduct, currentSize);
+  productOverlay.classList.remove("open");
+});
+
+// ===================== КОРЗИНА =====================
+
+const cartBtn    = document.getElementById("cartBtn");
+const cartBadge  = document.getElementById("cartBadge");
+const cartOverlay= document.getElementById("cartOverlay");
+const cartClose  = document.getElementById("cartClose");
+const cartList   = document.getElementById("cartList");
+const cartFooter = document.getElementById("cartFooter");
+const cartTotal  = document.getElementById("cartTotal");
+const checkoutBtn= document.getElementById("checkoutBtn");
+
+// Корзина в localStorage
+function getCart() {
+  return JSON.parse(localStorage.getItem("cart") || "[]");
+}
+function saveCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartBadge();
+}
+
+function addToCart(product, size) {
+  const cart = getCart();
+  const key = `${product.id}-${size}`;
+  const existing = cart.find(i => i.key === key);
+
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({
+      key,
+      id: product.id,
+      name: product.name,
+      brand: product.brand,
+      price: product.price,
+      emoji: product.emoji,
+      bg: product.bg,
+      size,
+      qty: 1,
+    });
+  }
+
+  saveCart(cart);
+  renderCart();
+}
+
+function removeFromCart(key) {
+  const cart = getCart().filter(i => i.key !== key);
+  saveCart(cart);
+  renderCart();
+}
+
+function updateCartBadge() {
+  const total = getCart().reduce((s, i) => s + i.qty, 0);
+  cartBadge.textContent = total;
+  cartBadge.classList.toggle("show", total > 0);
+}
+
+function renderCart() {
+  const cart = getCart();
+
+  if (cart.length === 0) {
+    cartList.innerHTML = `
+      <div class="cart-empty">
+        <span class="cart-empty-icon">🛒</span>
+        Корзина пока пуста
+      </div>`;
+    cartFooter.classList.add("hidden");
+    return;
+  }
+
+  cartFooter.classList.remove("hidden");
+  cartList.innerHTML = "";
+
+  cart.forEach(item => {
+    const el = document.createElement("div");
+    el.className = "cart-item";
+    el.innerHTML = `
+      <div class="cart-item-img" style="background:${item.bg}">${item.emoji}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.brand} ${item.name}</div>
+        <div class="cart-item-sub">Размер: ${item.size} • ${item.qty} шт.</div>
+      </div>
+      <div class="cart-item-price">${(item.price * item.qty).toLocaleString("ru-RU")} ₽</div>
+      <button class="cart-item-remove" title="Удалить">🗑</button>
+    `;
+    el.querySelector(".cart-item-remove").addEventListener("click", () => removeFromCart(item.key));
+    cartList.appendChild(el);
+  });
+
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  cartTotal.textContent = total.toLocaleString("ru-RU") + " ₽";
+}
+
+// Открытие корзины
+cartBtn.addEventListener("click", () => {
+  renderCart();
+  cartOverlay.classList.add("open");
+});
+cartClose.addEventListener("click", () => cartOverlay.classList.remove("open"));
+cartOverlay.addEventListener("click", (e) => {
+  if (e.target === cartOverlay) cartOverlay.classList.remove("open");
+});
+
+// Оформление заказа (пока просто заглушка)
+checkoutBtn.addEventListener("click", () => {
+  alert("Заказ оформлен! Спасибо за покупку 👟");
+  saveCart([]);
+  renderCart();
+  cartOverlay.classList.remove("open");
+});
+
+// Закрытие по Esc — добавляем и для новых модалок
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    productOverlay.classList.remove("open");
+    cartOverlay.classList.remove("open");
+  }
+});
 // ===================== СТАРТ =====================
 renderCatalog();
 renderAuth();
