@@ -1,35 +1,42 @@
 // ===================== ДАННЫЕ КАТАЛОГА =====================
-// Пока массив прямо здесь. Потом можно вынести в отдельный products.js
 const products = [
-  { id: 1, brand: "Nike",    name: "Air Max 270",      price: 12990, emoji: "👟", bg: "linear-gradient(135deg,#c8f0d4,#a8e6cf)",
+  { id: 1, brand: "Nike", name: "Air Max 270", price: 12990, emoji: "👟",
+    bg: "linear-gradient(135deg,#c8f0d4,#a8e6cf)",
     desc: "Легендарная амортизация Air Max. Мягкая посадка, дышащий верх и стиль на каждый день.",
     sizes: [39, 40, 41, 42, 43, 44] },
 
-  { id: 2, brand: "Adidas",  name: "Ultraboost 22",    price: 15490, emoji: "👟", bg: "linear-gradient(135deg,#d4f0d9,#b8e6c1)",
+  { id: 2, brand: "Adidas", name: "Ultraboost 22", price: 15490, emoji: "👟",
+    bg: "linear-gradient(135deg,#d4f0d9,#b8e6c1)",
     desc: "Технология BOOST для максимальной энергии в каждом шаге. Идеально для бега и города.",
     sizes: [40, 41, 42, 43, 44, 45] },
 
-  { id: 3, brand: "Puma",    name: "RS-X Reinvention", price: 9990,  emoji: "👟", bg: "linear-gradient(135deg,#e0f5e0,#c0e8c8)",
+  { id: 3, brand: "Puma", name: "RS-X Reinvention", price: 9990, emoji: "👟",
+    bg: "linear-gradient(135deg,#e0f5e0,#c0e8c8)",
     desc: "Массивный ретро-дизайн с современной амортизацией. Яркий акцент в твоём образе.",
     sizes: [38, 39, 40, 41, 42, 43] },
 
-  { id: 4, brand: "New Balance", name: "574 Classic",  price: 11200, emoji: "👟", bg: "linear-gradient(135deg,#cbeed3,#a0dfb0)",
+  { id: 4, brand: "New Balance", name: "574 Classic", price: 11200, emoji: "👟",
+    bg: "linear-gradient(135deg,#cbeed3,#a0dfb0)",
     desc: "Икона 80-х и хит современности. Замша и сетка, мягкая подошва ENCAP.",
     sizes: [39, 40, 41, 42, 43, 44, 45] },
 
-  { id: 5, brand: "Reebok",  name: "Club C 85",        price: 8490,  emoji: "👟", bg: "linear-gradient(135deg,#d8f3dc,#b7e4c7)",
+  { id: 5, brand: "Reebok", name: "Club C 85", price: 8490, emoji: "👟",
+    bg: "linear-gradient(135deg,#d8f3dc,#b7e4c7)",
     desc: "Классические теннисные кроссовки в минималистичном дизайне. Кожаный верх, вечная классика.",
     sizes: [38, 39, 40, 41, 42, 43] },
 
-  { id: 6, brand: "Asics",   name: "Gel-Kayano 29",    price: 16990, emoji: "👟", bg: "linear-gradient(135deg,#e6f7e6,#c6ebd0)",
+  { id: 6, brand: "Asics", name: "Gel-Kayano 29", price: 16990, emoji: "👟",
+    bg: "linear-gradient(135deg,#e6f7e6,#c6ebd0)",
     desc: "Премиальная беговая модель с гелевой амортизацией. Поддержка стопы на длинных дистанциях.",
     sizes: [40, 41, 42, 43, 44, 45] },
 
-  { id: 7, brand: "Jordan",  name: "Air 1 Low",        price: 18990, emoji: "👟", bg: "linear-gradient(135deg,#b9e8c5,#93d8a8)",
+  { id: 7, brand: "Jordan", name: "Air 1 Low", price: 18990, emoji: "👟",
+    bg: "linear-gradient(135deg,#b9e8c5,#93d8a8)",
     desc: "Культовые баскетбольные кроссовки. Кожаный верх и узнаваемый силуэт Air Jordan 1.",
     sizes: [40, 41, 42, 43, 44, 45] },
 
-  { id: 8, brand: "Vans",    name: "Old Skool",        price: 7290,  emoji: "👟", bg: "linear-gradient(135deg,#d0efd8,#aee0bc)",
+  { id: 8, brand: "Vans", name: "Old Skool", price: 7290, emoji: "👟",
+    bg: "linear-gradient(135deg,#d0efd8,#aee0bc)",
     desc: "Скейтерская классика с боковой полосой. Прочные, удобные, на все времена.",
     sizes: [38, 39, 40, 41, 42, 43, 44] },
 ];
@@ -43,7 +50,6 @@ function renderCatalog() {
   products.forEach((p, index) => {
     const card = document.createElement("div");
     card.className = "card";
-    // задержка появления для "каскадного" эффекта
     card.style.animationDelay = (index * 0.08) + "s";
 
     card.innerHTML = `
@@ -53,18 +59,12 @@ function renderCatalog() {
       <div class="card-price">${p.price.toLocaleString("ru-RU")} ₽</div>
     `;
 
-       card.addEventListener("click", () => openProduct(p.id));
-
+    card.addEventListener("click", () => openProduct(p.id));
     catalogEl.appendChild(card);
   });
 }
 
-// ===================== АВТОРИЗАЦИЯ (заготовка под шаг 2) =====================
-// Пока просто отображаем имя, если пользователь есть в localStorage.
-// На шаге 2 сделаем модалку с формой регистрации/входа.
-
 // ===================== АВТОРИЗАЦИЯ =====================
-
 const authBlock     = document.getElementById("authBlock");
 const modalOverlay  = document.getElementById("modalOverlay");
 const modal         = document.getElementById("modal");
@@ -74,7 +74,6 @@ const registerForm  = document.getElementById("registerForm");
 const loginError    = document.getElementById("loginError");
 const registerError = document.getElementById("registerError");
 
-// ---------- Хранилище ----------
 function getUser() {
   return JSON.parse(localStorage.getItem("user") || "null");
 }
@@ -85,7 +84,6 @@ function clearUser() {
   localStorage.removeItem("user");
 }
 
-// ---------- Открытие / закрытие модалки ----------
 function openModal(tab = "login") {
   switchTab(tab);
   loginError.textContent = "";
@@ -101,11 +99,7 @@ modalClose.addEventListener("click", closeModal);
 modalOverlay.addEventListener("click", (e) => {
   if (e.target === modalOverlay) closeModal();
 });
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") closeModal();
-});
 
-// ---------- Переключение вкладок ----------
 const tabs = document.querySelectorAll(".tab");
 
 function switchTab(name) {
@@ -123,14 +117,13 @@ tabs.forEach(tab => {
   tab.addEventListener("click", () => switchTab(tab.dataset.tab));
 });
 
-// ---------- Тряска модалки при ошибке ----------
 function shakeModal() {
   modal.classList.remove("shake");
-  void modal.offsetWidth; // форс-перезапуск анимации
+  void modal.offsetWidth;
   modal.classList.add("shake");
 }
 
-// ---------- РЕГИСТРАЦИЯ ----------
+// РЕГИСТРАЦИЯ
 registerForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const data = new FormData(registerForm);
@@ -144,7 +137,6 @@ registerForm.addEventListener("submit", (e) => {
     return;
   }
 
-  // Проверяем, что email ещё не занят
   const existing = JSON.parse(localStorage.getItem("allUsers") || "{}");
   if (existing[email]) {
     registerError.textContent = "Этот email уже зарегистрирован";
@@ -152,18 +144,16 @@ registerForm.addEventListener("submit", (e) => {
     return;
   }
 
-  // Сохраняем пользователя в "базу"
   existing[email] = { name, password };
   localStorage.setItem("allUsers", JSON.stringify(existing));
 
-  // Логиним
   saveUser({ name, email });
   registerForm.reset();
   closeModal();
   renderAuth();
 });
 
-// ---------- ВХОД ----------
+// ВХОД
 loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const data = new FormData(loginForm);
@@ -185,7 +175,7 @@ loginForm.addEventListener("submit", (e) => {
   renderAuth();
 });
 
-// ---------- Рендер хедера ----------
+// РЕНДЕР ХЕДЕРА
 function renderAuth() {
   const user = getUser();
 
@@ -210,8 +200,7 @@ function renderAuth() {
   }
 }
 
-// ===================== ТОВАР: ОТКРЫТИЕ =====================
-
+// ===================== ТОВАР =====================
 const productOverlay = document.getElementById("productOverlay");
 const productClose   = document.getElementById("productClose");
 const pvImage = document.getElementById("pvImage");
@@ -222,8 +211,8 @@ const pvDesc  = document.getElementById("pvDesc");
 const pvSizes = document.getElementById("pvSizes");
 const pvAdd   = document.getElementById("pvAdd");
 
-let currentProduct = null;   // открытый сейчас товар
-let currentSize    = null;   // выбранный размер
+let currentProduct = null;
+let currentSize    = null;
 
 function openProduct(id) {
   const p = products.find(x => x.id === id);
@@ -239,7 +228,6 @@ function openProduct(id) {
   pvPrice.textContent = p.price.toLocaleString("ru-RU") + " ₽";
   pvDesc.textContent  = p.desc;
 
-  // Рендер размеров
   pvSizes.innerHTML = "";
   p.sizes.forEach(size => {
     const btn = document.createElement("button");
@@ -261,12 +249,10 @@ productOverlay.addEventListener("click", (e) => {
   if (e.target === productOverlay) productOverlay.classList.remove("open");
 });
 
-// Кнопка "Добавить в корзину" в модалке товара
 pvAdd.addEventListener("click", () => {
   if (!currentProduct) return;
 
   if (!currentSize) {
-    // мягко подсветим блок размеров
     pvSizes.parentElement.style.transition = "transform .2s";
     pvSizes.parentElement.style.transform = "scale(1.03)";
     setTimeout(() => { pvSizes.parentElement.style.transform = "scale(1)"; }, 200);
@@ -278,7 +264,6 @@ pvAdd.addEventListener("click", () => {
 });
 
 // ===================== КОРЗИНА =====================
-
 const cartBtn    = document.getElementById("cartBtn");
 const cartBadge  = document.getElementById("cartBadge");
 const cartOverlay= document.getElementById("cartOverlay");
@@ -288,7 +273,6 @@ const cartFooter = document.getElementById("cartFooter");
 const cartTotal  = document.getElementById("cartTotal");
 const checkoutBtn= document.getElementById("checkoutBtn");
 
-// Корзина в localStorage
 function getCart() {
   return JSON.parse(localStorage.getItem("cart") || "[]");
 }
@@ -370,7 +354,6 @@ function renderCart() {
   cartTotal.textContent = total.toLocaleString("ru-RU") + " ₽";
 }
 
-// Открытие корзины
 cartBtn.addEventListener("click", () => {
   renderCart();
   cartOverlay.classList.add("open");
@@ -380,7 +363,6 @@ cartOverlay.addEventListener("click", (e) => {
   if (e.target === cartOverlay) cartOverlay.classList.remove("open");
 });
 
-// Оформление заказа (пока просто заглушка)
 checkoutBtn.addEventListener("click", () => {
   alert("Заказ оформлен! Спасибо за покупку 👟");
   saveCart([]);
@@ -388,15 +370,17 @@ checkoutBtn.addEventListener("click", () => {
   cartOverlay.classList.remove("open");
 });
 
-// Закрытие по Esc — добавляем и для новых модалок
+// Закрытие по Esc — для всех модалок
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
+    modalOverlay.classList.remove("open");
     productOverlay.classList.remove("open");
     cartOverlay.classList.remove("open");
   }
 });
-// ===================== СТАРТ =====================
+
 // ===================== СТАРТ =====================
 renderCatalog();
 renderAuth();
 updateCartBadge();
+renderCart();
