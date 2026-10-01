@@ -12,8 +12,15 @@
   <header class="header">
     <div class="logo">Sneak<span>Hub</span></div>
 
-    <nav class="auth" id="authBlock">
-      <!-- Сюда позже JS подставит либо кнопки, либо имя пользователя -->
+    <div class="header-right">
+      <!-- КОРЗИНА -->
+      <button class="cart-btn" id="cartBtn" title="Корзина">
+        🛒
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+
+      <nav class="auth" id="authBlock">
+   
       <button class="btn btn-outline" id="loginBtn">Вход</button>
       <button class="btn btn-primary" id="registerBtn">Регистрация</button>
     </nav>
