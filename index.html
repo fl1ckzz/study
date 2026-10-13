@@ -12,18 +12,28 @@
     <div class="logo">Sneak<span>Hub</span></div>
 
     <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
       <input type="text" id="searchInput" class="search-input" placeholder="Поиск по названию или бренду..." autocomplete="off">
-      <button class="search-clear" id="searchClear" title="Очистить">✕</button>
+      <button class="search-clear" id="searchClear" title="Очистить" type="button">×</button>
     </div>
 
     <div class="header-right">
-      <button class="icon-btn" id="favBtn" title="Избранное">
-        ❤️
+      <button class="icon-btn" id="favBtn" title="Избранное" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
         <span class="badge" id="favBadge">0</span>
       </button>
 
-      <button class="icon-btn" id="cartBtn" title="Корзина">
-        🛒
+      <button class="icon-btn" id="cartBtn" title="Корзина" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
         <span class="badge" id="cartBadge">0</span>
       </button>
 
@@ -34,35 +44,38 @@
   <main>
     <section class="hero">
       <h1>Кроссовки твоей мечты</h1>
-      <p>Оригинальные модели • Быстрая доставка • Лучшие цены</p>
+      <p>Оригинальные модели &bull; Быстрая доставка &bull; Лучшие цены</p>
     </section>
 
     <section class="catalog">
       <h2 class="section-title">Каталог</h2>
       <div class="grid" id="catalog"></div>
       <div class="empty-result hidden" id="emptyResult">
-        <span class="empty-icon">🔍</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
         <p>По запросу ничего не найдено</p>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    © 2025 SneakHub — учебный проект
+    &copy; 2025 SneakHub — учебный проект
   </footer>
 
   <!-- Авторизация -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal" id="modal">
-      <button class="modal-close" id="modalClose">✕</button>
+      <button class="modal-close" id="modalClose" type="button">×</button>
 
       <div class="tabs">
-        <button class="tab active" data-tab="login">Вход</button>
-        <button class="tab" data-tab="register">Регистрация</button>
+        <button class="tab active" data-tab="login" type="button">Вход</button>
+        <button class="tab" data-tab="register" type="button">Регистрация</button>
       </div>
 
       <form class="form" id="loginForm">
-        <h2>С возвращением 👋</h2>
+        <h2>С возвращением</h2>
         <label>Email
           <input type="email" name="email" placeholder="you@mail.ru" required>
         </label>
@@ -74,7 +87,7 @@
       </form>
 
       <form class="form hidden" id="registerForm">
-        <h2>Создать аккаунт ✨</h2>
+        <h2>Создать аккаунт</h2>
         <label>Имя
           <input type="text" name="name" placeholder="Как тебя зовут?" required minlength="2">
         </label>
@@ -93,10 +106,10 @@
   <!-- Товар -->
   <div class="modal-overlay" id="productOverlay">
     <div class="modal modal-wide" id="productModal">
-      <button class="modal-close" id="productClose">✕</button>
+      <button class="modal-close" id="productClose" type="button">×</button>
 
       <div class="product-view">
-        <div class="product-view-image" id="pvImage">👟</div>
+        <div class="product-view-image" id="pvImage"></div>
 
         <div class="product-view-info">
           <div class="card-brand" id="pvBrand">Brand</div>
@@ -110,8 +123,12 @@
           </div>
 
           <div class="pv-actions">
-            <button class="btn btn-primary btn-full" id="pvAdd">В корзину</button>
-            <button class="fav-big" id="pvFav" title="В избранное">♡</button>
+            <button class="btn btn-primary btn-full" id="pvAdd" type="button">В корзину</button>
+            <button class="fav-big" id="pvFav" title="В избранное" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -121,16 +138,16 @@
   <!-- Корзина -->
   <div class="modal-overlay" id="cartOverlay">
     <div class="modal" id="cartModal">
-      <button class="modal-close" id="cartClose">✕</button>
+      <button class="modal-close" id="cartClose" type="button">×</button>
 
-      <h2 class="cart-title">Корзина 🛒</h2>
+      <h2 class="cart-title">Корзина</h2>
       <div class="cart-list" id="cartList"></div>
 
       <div class="cart-footer hidden" id="cartFooter">
         <div class="cart-total">
           Итого: <span id="cartTotal">0 ₽</span>
         </div>
-        <button class="btn btn-primary btn-full" id="checkoutBtn">Оформить заказ</button>
+        <button class="btn btn-primary btn-full" id="checkoutBtn" type="button">Оформить заказ</button>
       </div>
     </div>
   </div>
@@ -138,9 +155,9 @@
   <!-- Избранное -->
   <div class="modal-overlay" id="favOverlay">
     <div class="modal" id="favModal">
-      <button class="modal-close" id="favClose">✕</button>
+      <button class="modal-close" id="favClose" type="button">×</button>
 
-      <h2 class="cart-title">Избранное ❤️</h2>
+      <h2 class="cart-title">Избранное</h2>
       <div class="cart-list" id="favList"></div>
     </div>
   </div>
