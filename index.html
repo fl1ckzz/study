@@ -8,23 +8,29 @@
 </head>
 <body>
 
-  <!-- ================= ХЕДЕР ================= -->
   <header class="header">
     <div class="logo">Sneak<span>Hub</span></div>
 
+    <div class="search-wrap">
+      <input type="text" id="searchInput" class="search-input" placeholder="Поиск по названию или бренду..." autocomplete="off">
+      <button class="search-clear" id="searchClear" title="Очистить">✕</button>
+    </div>
+
     <div class="header-right">
-      <button class="cart-btn" id="cartBtn" title="Корзина">
-        🛒
-        <span class="cart-badge" id="cartBadge">0</span>
+      <button class="icon-btn" id="favBtn" title="Избранное">
+        ❤️
+        <span class="badge" id="favBadge">0</span>
       </button>
 
-      <nav class="auth" id="authBlock">
-        <!-- JS подставит кнопки или имя пользователя -->
-      </nav>
+      <button class="icon-btn" id="cartBtn" title="Корзина">
+        🛒
+        <span class="badge" id="cartBadge">0</span>
+      </button>
+
+      <nav class="auth" id="authBlock"></nav>
     </div>
   </header>
 
-  <!-- ================= ОСНОВНОЙ КОНТЕНТ ================= -->
   <main>
     <section class="hero">
       <h1>Кроссовки твоей мечты</h1>
@@ -34,6 +40,10 @@
     <section class="catalog">
       <h2 class="section-title">Каталог</h2>
       <div class="grid" id="catalog"></div>
+      <div class="empty-result hidden" id="emptyResult">
+        <span class="empty-icon">🔍</span>
+        <p>По запросу ничего не найдено</p>
+      </div>
     </section>
   </main>
 
@@ -41,10 +51,9 @@
     © 2025 SneakHub — учебный проект
   </footer>
 
-  <!-- ================= МОДАЛКА АВТОРИЗАЦИИ ================= -->
+  <!-- Авторизация -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal" id="modal">
-
       <button class="modal-close" id="modalClose">✕</button>
 
       <div class="tabs">
@@ -78,11 +87,10 @@
         <p class="form-error" id="registerError"></p>
         <button type="submit" class="btn btn-primary btn-full">Зарегистрироваться</button>
       </form>
-
     </div>
   </div>
 
-  <!-- ================= МОДАЛКА ТОВАРА ================= -->
+  <!-- Товар -->
   <div class="modal-overlay" id="productOverlay">
     <div class="modal modal-wide" id="productModal">
       <button class="modal-close" id="productClose">✕</button>
@@ -101,19 +109,21 @@
             <div class="sizes" id="pvSizes"></div>
           </div>
 
-          <button class="btn btn-primary btn-full" id="pvAdd">Добавить в корзину</button>
+          <div class="pv-actions">
+            <button class="btn btn-primary btn-full" id="pvAdd">В корзину</button>
+            <button class="fav-big" id="pvFav" title="В избранное">♡</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ================= МОДАЛКА КОРЗИНЫ ================= -->
+  <!-- Корзина -->
   <div class="modal-overlay" id="cartOverlay">
     <div class="modal" id="cartModal">
       <button class="modal-close" id="cartClose">✕</button>
 
       <h2 class="cart-title">Корзина 🛒</h2>
-
       <div class="cart-list" id="cartList"></div>
 
       <div class="cart-footer hidden" id="cartFooter">
@@ -122,6 +132,16 @@
         </div>
         <button class="btn btn-primary btn-full" id="checkoutBtn">Оформить заказ</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Избранное -->
+  <div class="modal-overlay" id="favOverlay">
+    <div class="modal" id="favModal">
+      <button class="modal-close" id="favClose">✕</button>
+
+      <h2 class="cart-title">Избранное ❤️</h2>
+      <div class="cart-list" id="favList"></div>
     </div>
   </div>
 
