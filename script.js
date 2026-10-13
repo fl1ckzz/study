@@ -1,4 +1,3 @@
-// ===================== ДАННЫЕ КАТАЛОГА =====================
 const products = [
   { id: 1, brand: "Nike", name: "Air Max 270", price: 12990, emoji: "👟",
     bg: "linear-gradient(135deg,#c8f0d4,#a8e6cf)",
@@ -41,18 +40,64 @@ const products = [
     sizes: [38, 39, 40, 41, 42, 43, 44] },
 ];
 
-// ===================== РЕНДЕР КАТАЛОГА =====================
-const catalogEl = document.getElementById("catalog");
+let currentSearch = "";
 
+const catalogEl   = document.getElementById("catalog");
+const emptyResult = document.getElementById("emptyResult");
+const searchInput = document.getElementById("searchInput");
+const searchClear = document.getElementById("searchClear");
+
+/* ---------- Избранное ---------- */
+function getFavorites() {
+  return JSON.parse(localStorage.getItem("favorites") || "[]");
+}
+function saveFavorites(ids) {
+  localStorage.setItem("favorites", JSON.stringify(ids));
+  updateFavBadge();
+}
+function isFavorite(id) {
+  return getFavorites().includes(id);
+}
+function toggleFavorite(id) {
+  let favs = getFavorites();
+  favs = favs.includes(id) ? favs.filter(x => x !== id) : [...favs, id];
+  saveFavorites(favs);
+  return favs.includes(id);
+}
+
+const favBadge = document.getElementById("favBadge");
+
+function updateFavBadge() {
+  const count = getFavorites().length;
+  favBadge.textContent = count;
+  favBadge.classList.toggle("show", count > 0);
+}
+
+/* ---------- Каталог ---------- */
 function renderCatalog() {
+  const q = currentSearch;
+  const list = products.filter(p => {
+    if (!q) return true;
+    return p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q);
+  });
+
   catalogEl.innerHTML = "";
 
-  products.forEach((p, index) => {
+  if (list.length === 0) {
+    emptyResult.classList.remove("hidden");
+    return;
+  }
+  emptyResult.classList.add("hidden");
+
+  list.forEach((p, i) => {
     const card = document.createElement("div");
     card.className = "card";
-    card.style.animationDelay = (index * 0.08) + "s";
+    card.style.animationDelay = (i * 0.05) + "s";
+
+    const fav = isFavorite(p.id);
 
     card.innerHTML = `
+      <button class="fav-toggle ${fav ? "active" : ""}" title="В избранное">${fav ? "♥" : "♡"}</button>
       <div class="card-image" style="background:${p.bg}">${p.emoji}</div>
       <div class="card-brand">${p.brand}</div>
       <div class="card-name">${p.name}</div>
@@ -60,11 +105,36 @@ function renderCatalog() {
     `;
 
     card.addEventListener("click", () => openProduct(p.id));
+
+    const heart = card.querySelector(".fav-toggle");
+    heart.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const nowFav = toggleFavorite(p.id);
+      heart.classList.toggle("active", nowFav);
+      heart.textContent = nowFav ? "♥" : "♡";
+      renderFavorites();
+    });
+
     catalogEl.appendChild(card);
   });
 }
 
-// ===================== АВТОРИЗАЦИЯ =====================
+/* ---------- Поиск ---------- */
+searchInput.addEventListener("input", () => {
+  currentSearch = searchInput.value.trim().toLowerCase();
+  searchClear.classList.toggle("show", currentSearch.length > 0);
+  renderCatalog();
+});
+
+searchClear.addEventListener("click", () => {
+  searchInput.value = "";
+  currentSearch = "";
+  searchClear.classList.remove("show");
+  renderCatalog();
+  searchInput.focus();
+});
+
+/* ---------- Авторизация ---------- */
 const authBlock     = document.getElementById("authBlock");
 const modalOverlay  = document.getElementById("modalOverlay");
 const modal         = document.getElementById("modal");
@@ -90,7 +160,6 @@ function openModal(tab = "login") {
   registerError.textContent = "";
   modalOverlay.classList.add("open");
 }
-
 function closeModal() {
   modalOverlay.classList.remove("open");
 }
@@ -123,7 +192,6 @@ function shakeModal() {
   modal.classList.add("shake");
 }
 
-// РЕГИСТРАЦИЯ
 registerForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const data = new FormData(registerForm);
@@ -153,7 +221,6 @@ registerForm.addEventListener("submit", (e) => {
   renderAuth();
 });
 
-// ВХОД
 loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const data = new FormData(loginForm);
@@ -175,7 +242,6 @@ loginForm.addEventListener("submit", (e) => {
   renderAuth();
 });
 
-// РЕНДЕР ХЕДЕРА
 function renderAuth() {
   const user = getUser();
 
@@ -200,7 +266,7 @@ function renderAuth() {
   }
 }
 
-// ===================== ТОВАР =====================
+/* ---------- Товар ---------- */
 const productOverlay = document.getElementById("productOverlay");
 const productClose   = document.getElementById("productClose");
 const pvImage = document.getElementById("pvImage");
@@ -210,6 +276,7 @@ const pvPrice = document.getElementById("pvPrice");
 const pvDesc  = document.getElementById("pvDesc");
 const pvSizes = document.getElementById("pvSizes");
 const pvAdd   = document.getElementById("pvAdd");
+const pvFav   = document.getElementById("pvFav");
 
 let currentProduct = null;
 let currentSize    = null;
@@ -241,6 +308,10 @@ function openProduct(id) {
     pvSizes.appendChild(btn);
   });
 
+  const fav = isFavorite(p.id);
+  pvFav.classList.toggle("active", fav);
+  pvFav.textContent = fav ? "♥" : "♡";
+
   productOverlay.classList.add("open");
 }
 
@@ -251,27 +322,34 @@ productOverlay.addEventListener("click", (e) => {
 
 pvAdd.addEventListener("click", () => {
   if (!currentProduct) return;
-
   if (!currentSize) {
     pvSizes.parentElement.style.transition = "transform .2s";
     pvSizes.parentElement.style.transform = "scale(1.03)";
     setTimeout(() => { pvSizes.parentElement.style.transform = "scale(1)"; }, 200);
     return;
   }
-
   addToCart(currentProduct, currentSize);
   productOverlay.classList.remove("open");
 });
 
-// ===================== КОРЗИНА =====================
-const cartBtn    = document.getElementById("cartBtn");
-const cartBadge  = document.getElementById("cartBadge");
-const cartOverlay= document.getElementById("cartOverlay");
-const cartClose  = document.getElementById("cartClose");
-const cartList   = document.getElementById("cartList");
-const cartFooter = document.getElementById("cartFooter");
-const cartTotal  = document.getElementById("cartTotal");
-const checkoutBtn= document.getElementById("checkoutBtn");
+pvFav.addEventListener("click", () => {
+  if (!currentProduct) return;
+  const nowFav = toggleFavorite(currentProduct.id);
+  pvFav.classList.toggle("active", nowFav);
+  pvFav.textContent = nowFav ? "♥" : "♡";
+  renderFavorites();
+  renderCatalog();
+});
+
+/* ---------- Корзина ---------- */
+const cartBtn     = document.getElementById("cartBtn");
+const cartBadge   = document.getElementById("cartBadge");
+const cartOverlay = document.getElementById("cartOverlay");
+const cartClose   = document.getElementById("cartClose");
+const cartList    = document.getElementById("cartList");
+const cartFooter  = document.getElementById("cartFooter");
+const cartTotal   = document.getElementById("cartTotal");
+const checkoutBtn = document.getElementById("checkoutBtn");
 
 function getCart() {
   return JSON.parse(localStorage.getItem("cart") || "[]");
@@ -284,10 +362,10 @@ function saveCart(cart) {
 function addToCart(product, size) {
   const cart = getCart();
   const key = `${product.id}-${size}`;
-  const existing = cart.find(i => i.key === key);
+  const found = cart.find(i => i.key === key);
 
-  if (existing) {
-    existing.qty++;
+  if (found) {
+    found.qty++;
   } else {
     cart.push({
       key,
@@ -307,8 +385,7 @@ function addToCart(product, size) {
 }
 
 function removeFromCart(key) {
-  const cart = getCart().filter(i => i.key !== key);
-  saveCart(cart);
+  saveCart(getCart().filter(i => i.key !== key));
   renderCart();
 }
 
@@ -370,17 +447,82 @@ checkoutBtn.addEventListener("click", () => {
   cartOverlay.classList.remove("open");
 });
 
-// Закрытие по Esc — для всех модалок
+/* ---------- Избранное (модалка) ---------- */
+const favBtn     = document.getElementById("favBtn");
+const favOverlay = document.getElementById("favOverlay");
+const favClose   = document.getElementById("favClose");
+const favList    = document.getElementById("favList");
+
+function renderFavorites() {
+  updateFavBadge();
+  const favs = getFavorites();
+
+  if (favs.length === 0) {
+    favList.innerHTML = `
+      <div class="cart-empty">
+        <span class="cart-empty-icon">💔</span>
+        В избранном пока пусто
+      </div>`;
+    return;
+  }
+
+  favList.innerHTML = "";
+
+  favs.forEach(id => {
+    const p = products.find(x => x.id === id);
+    if (!p) return;
+
+    const el = document.createElement("div");
+    el.className = "cart-item";
+    el.innerHTML = `
+      <div class="cart-item-img" style="background:${p.bg}">${p.emoji}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${p.brand} ${p.name}</div>
+        <div class="cart-item-sub">${p.price.toLocaleString("ru-RU")} ₽</div>
+      </div>
+      <button class="cart-item-remove" title="Убрать">♥</button>
+    `;
+
+    el.addEventListener("click", (e) => {
+      if (e.target.classList.contains("cart-item-remove")) return;
+      favOverlay.classList.remove("open");
+      openProduct(p.id);
+    });
+
+    el.querySelector(".cart-item-remove").addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleFavorite(p.id);
+      renderFavorites();
+      renderCatalog();
+    });
+
+    favList.appendChild(el);
+  });
+}
+
+favBtn.addEventListener("click", () => {
+  renderFavorites();
+  favOverlay.classList.add("open");
+});
+favClose.addEventListener("click", () => favOverlay.classList.remove("open"));
+favOverlay.addEventListener("click", (e) => {
+  if (e.target === favOverlay) favOverlay.classList.remove("open");
+});
+
+/* ---------- Esc ---------- */
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     modalOverlay.classList.remove("open");
     productOverlay.classList.remove("open");
     cartOverlay.classList.remove("open");
+    favOverlay.classList.remove("open");
   }
 });
 
-// ===================== СТАРТ =====================
+/* ---------- Старт ---------- */
 renderCatalog();
 renderAuth();
 updateCartBadge();
+updateFavBadge();
 renderCart();
+renderFavorites();
